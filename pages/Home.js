@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import {View,ImageBackground, Button, Image, TextInput, StyleSheet, TouchableOpacity, ScrollView, FlatList,Text} from 'react-native';
 import {AntDesign, MaterialCommunityIcons} from "@expo/vector-icons";
 const Home = ()=>{
+    const [slideUP, setSlideUP] = useState(true);
     const audis = [
         {
             name:"RABEEL 1",
@@ -25,36 +26,40 @@ const Home = ()=>{
         }
     ];
 
-    const [slideUP, setSlideUP] = useState(true);
+    
     
     return(
         <View style={styles.homeContainer}>
-        <ImageBackground source={require('../assets/mic')} 
+        <ImageBackground source={require('../assets/wizad.jpg')} 
                   resizeMode="cover">
-            <View style={{zIndex:2, backgroundColor:"rgba(26,26,26,.95)"}}>
+            <View style={{zIndex:2,
+                height:"95%",
+                justifyContent:"space-between",
+                backgroundColor:"rgba(26,26,26,.95)"}}>
                 <View style={styles.header}>
                     <TouchableOpacity style={styles.menu}><AntDesign name="menufold"
                      size={22}
                      /></TouchableOpacity>
                 </View>
                 <View style={styles.details}>
+                    <View>
                     <Image style={styles.rotator} source={require('../assets/wizad.jpg')}/>
-                    <View style={styles.detail}>
-                        <View style={{
-                            display:"flex",
+                    <View style={{
                             alignItems:"center",
-                            marginBottom:"2.5rem", 
+                            marginBottom:40, 
                             justifyContent:"center"}}>
                             <Text style={styles.audioName}>Microsoft Windows</Text>
                             <Text style={styles.artist}>Sayyadi Rabil</Text>
                         </View>
+                    </View>
+                    <View style={styles.detail}>
+                    
                         <View style={{
-                            width:"85%",
+                            width:"100%",
                             marginTop:15
                         }}>
                             <View style={styles.progress}></View>
                             <View style={{
-                                display:"flex",
                                 flexDirection:"row",
                                 justifyContent:"space-between",
                                 alignItems:"center"
@@ -73,19 +78,19 @@ const Home = ()=>{
                         </View>
                         <View style={styles.controls}>
                             <TouchableOpacity>
-                                <MaterialCommunityIcons name="shuffle-disabled" color="#f2f2f2" size={18}/>
+                                <MaterialCommunityIcons name="shuffle-disabled" color="#f2f2f2" size={20}/>
                             </TouchableOpacity>
                             <TouchableOpacity >
-                                <AntDesign name="stepbackward" color="#f2f2f2" size={18}/>
+                                <AntDesign name="stepbackward" color="#f2f2f2" size={25}/>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.ctrlBtn}>
-                            <AntDesign name="caretright" size={25}/>
+                            <AntDesign name="caretright" size={28}/>
                             </TouchableOpacity>
                             <TouchableOpacity>
-                            <AntDesign name="stepforward" color="#f2f2f2" size={18}/>
+                            <AntDesign name="stepforward" color="#f2f2f2" size={25}/>
                             </TouchableOpacity>
                             <TouchableOpacity>
-                                <MaterialCommunityIcons name="repeat" color="#f2f2f2" size={18}/>
+                                <MaterialCommunityIcons name="repeat" color="#f2f2f2" size={20}/>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -98,36 +103,6 @@ const Home = ()=>{
                 <View style={styles.drawaCt}>
                     <TouchableOpacity style={styles.drawerBtn}></TouchableOpacity>
                 </View>
-            {/* <View style={styles.searchContainer}>
-            <TextInput style={styles.search} placeholder="Search here..."/>
-            <AntDesign name="search1" size={20}/>
-            </View> */}
-            {/* <View style={styles.listHead}>
-                <MaterialCommunityIcons name="playlist-music" size={30} color="#f2f2f2"/>
-                <Text style={{
-                    color:"#f2f2f2",
-                    fontFamily:"poppins",
-                    fontWeight:500,
-                    fontSize:18,
-                }}>Play Lists</Text>
-            </View> */}
-                {/* <FlatList 
-                data={audis}
-                keyExtractor= {audi => audi.name}
-                renderItem={({item})=>{
-                   return(<TouchableOpacity style={styles.music}>
-                        <View style={styles.musicInfo}>
-                        <View>
-                           <Image style={styles.musicIcon} source={require('../assets/team.jpg')}/>
-                       </View>
-                            <View>
-                                <Text style={styles.musicName}>{item.name}</Text>
-                                <Text style={styles.musicTitle}>{item.title}</Text>   
-                            </View> 
-                        </View>
-                        <Text style={styles.musicDuration}>3:30</Text>
-                    </TouchableOpacity>)
-                }}/> */}
             </View>
 
         </View>
@@ -137,16 +112,14 @@ const Home = ()=>{
 const styles = StyleSheet.create({
     homeContainer:{
         backgroundColor:"rgb(239, 241, 248)",
-        height:"100vh",
-        width:"100%",
+        flex:1,
         // padding:30
     },
     header:{
-        display:"flex",
         flexDirection:"row",
         justifyContent:"flex-end",
         alignItems:"center",
-        marginBottom:"1rem",
+        marginBottom:16,
         padding:30
     },
     // cover:{
@@ -159,74 +132,92 @@ const styles = StyleSheet.create({
     //     zIndex:1
     // },
     menu:{
-        height:35,
-        width:35,
-        borderRadius:"50%",
-        display:"flex",
+        borderRadius:50,
         alignItems:"center",
         justifyContent:"center",
         padding:10,
-        backgroundColor:"rgba(255,255,255,0.8)"
+        backgroundColor:"rgba(255,255,255,0.98)"
     },
     details:{
-        // height:"50vh",
-        display:"flex",
         flexDirection:"column",
-        justifyContent:"center",
+        justifyContent:"space-between",
         alignItems:"center",
+        height:"75%",
         paddingHorizontal:30,
         paddingBottom:20,
         color:"white",
-        transform:[{translateY:-30}]
+        // transform:[{translateY:-30}]
 
     },
     rotator:{
         height:150,
         width:150,
-        marginVertical:'1rem',
-        borderRadius:"50%"
+        marginVertical:16,
+        borderRadius:75,
+        marginBottom:30
     },
     detail:{
-        // height:"80vh",
         width:"100%",
         justifyContent:"center",
         alignItems:"center",
         alignSelf:"flex-start"
+        
     },
     audioName:{
-        fontWeight:500,
-        fontFamily:"poppins",
         marginBottom:5,
         color:"#ffffff",
         fontSize:18
     },
     artist:{
-        fontWeight:400,
-        fontFamily:"poppins",
         color:"#f2f2f2",
-        fontSize:12 
+        fontSize:13 
     },
     controls:{
-        width:"70%",
+        width:"95%",
         paddingHorizontal:20,
         paddingTop:5,
         paddingBottom:30,
-        display:"flex",
         flexDirection:"row",
         justifyContent:"space-around",
         alignItems:"center"
     },
     ctrlBtn:{
         backgroundColor:"#f2f2f2",
-        padding:5,
-        borderRadius:"50%"
+        padding:10,
+        borderRadius:50
     },
     progress:{
-        height:2,
+        height:4,
         width:"100%",
         backgroundColor:"#f3f3f3",
-        borderRadius:3
+        borderRadius:3,
+        marginBottom:5
     },
+    audioList:{
+        backgroundColor:"rgb(0,0,10)",
+        paddingHorizontal:30,
+        paddingBottom:32,
+        paddingTop:15,
+        borderTopLeftRadius:20,
+        borderTopRightRadius:20,
+        transform:[{translateY:-50}],
+        width:"100%",
+        zIndex:3
+    
+        
+    },
+    drawaCt:{
+        width:"100%",
+        flexDirection:"row",
+        justifyContent:"center",
+        marginBottom:16
+    },
+    drawerBtn:{
+        backgroundColor:"#f2f2f2",
+        width:80,
+        height:6,
+        borderRadius:3
+    }
     
 })
 export default Home;

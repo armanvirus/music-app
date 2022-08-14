@@ -21,24 +21,49 @@ function AudioList(){
         {
             name:"RABEEL 5",
             title:"Son Annabi cikin Zuciya"
+        },
+        {
+            name:"RABEEL 6",
+            title:"Imamul Mursalina"
+        },
+        {
+            name:"RABEEL 8",
+            title:"Imamul Mursalina"
+        },
+        {
+            name:"RABEEL 7",
+            title:"Son Annabi cikin Zuciya"
+        },
+        {
+            name:"RABEEL 9",
+            title:"Son Annabi cikin Zuciya"
+        },
+        {
+            name:"RABEEL 10",
+            title:"Son Annabi cikin Zuciya"
+        },
+        {
+            name:"RABEEL 11",
+            title:"Son Annabi cikin Zuciya"
         }
     ];
     return(
         <View style={styles.audioList}>
-                <View style={styles.drawaCt}>
+                {/* <View style={styles.drawaCt}>
                     <TouchableOpacity style={styles.drawerBtn}></TouchableOpacity>
-                </View>
+                </View> */}
             <View style={styles.searchContainer}>
             <TextInput style={styles.search} placeholder="Search here..."/>
             <AntDesign name="search1" size={20}/>
             </View>
             <View style={styles.listHead}>
-                <MaterialCommunityIcons name="playlist-music" size={30} color="#f2f2f2"/>
+                <MaterialCommunityIcons name="playlist-music" size={40} color="#f2f2f2"/>
                 <Text style={{
                     color:"#f2f2f2",
-                    fontFamily:"poppins",
-                    fontWeight:500,
-                    fontSize:18,
+                    // fontFamily:"poppins",
+                    // fontWeight:500,
+                    fontSize:20,
+                    marginLeft:5
                 }}>Play Lists</Text>
             </View>
                 <FlatList 
@@ -65,21 +90,19 @@ function AudioList(){
 const styles = StyleSheet.create({
     audioList:{
         backgroundColor:"rgb(0,0,10)",
-        paddingHorizontal:30,
-        paddingBottom:"2rem",
+        paddingHorizontal:5,
+        paddingBottom:32,
         paddingTop:15,
-        borderTopLeftRadius:20,
-        borderTopRightRadius:20,
-        transform:[{translateY:-40}],
+        // borderTopLeftRadius:20,
+        // borderTopRightRadius:20,
+        // transform:[{translateY:-40}],
         width:"100%",
-        position: slideUP ? "fixed" : "static",
-        top:15
     },
     drawaCt:{
         width:"100%",
         flexDirection:"row",
         justifyContent:"center",
-        marginBottom:"1rem"
+        marginBottom:16
     },
     drawerBtn:{
         backgroundColor:"#f2f2f2",
@@ -90,44 +113,44 @@ const styles = StyleSheet.create({
     searchContainer:{
         backgroundColor:"#dce1eb",
         color: "#222",
-        width:"100%",
+        width:"98%",
         flexDirection:"row",
         justifyContent:"space-between",
         alignItems:"center",
         marginTop:20,
+        alignSelf:"center",
 //   borderRadius: 15 0 0 15;
         paddingHorizontal:15,
         paddingVertical:5,
+        marginHorizontal:10,
         shadowColor:"rgba(132,139,200,0.60)",
         shadowOffset:{width:0, height:0},
-        shadowRadius:"0.4rem",
-        borderRadius:10
+        shadowRadius:8,
+        borderRadius:5
     },
     search:{
         backgroundColor:"transparent",
         // width: "100%",
-        outlineStyle:"none",
-        border: "none",
+        // outlineStyle:"none",
+        // border: "none",
     },
     listHead:{
         paddingVertical:15,
         color:"#f2f2f2",
-        fontFamily:"poppins",
-        fontWeight:500,
-        fontSize:18,
-        paddingHorizontal:10,
         flexDirection:"row",
+        alignItems:"center",
         gap:10
     },
     music:{
-        paddingHorizontal:20,
+        paddingRight:20,
+        paddingLeft:5,
         paddingVertical:10,
         flexDirection:"row",
         justifyContent:"space-between",
         alignItems:"center",
-        backgroundColor:"rgba(26,26,26,.3)",
-        marginVertical:3,
-        borderRadius:5
+        backgroundColor:"rgba(38,38,38,1)",
+        marginVertical:1,
+        // borderRadius:5
     },
     musicInfo:{
         flexDirection:"row",
@@ -142,21 +165,16 @@ const styles = StyleSheet.create({
         marginRight:5
     },
     musicName:{
-        fontFamily:"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
         color:"#f3f3f3",
         fontSize:16,
-        fontWeight:400,
     },
     musicTitle:{
         fontSize:12,
         color:"#f4f4f4",
-        fontFamily:"montserrat",
         marginTop:3
     },
     musicDuration:{
         color:"#ffffff",
-        fontFamily:"poppins",
-        fontWeight:500
     }
 })
 export default AudioList;
