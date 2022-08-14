@@ -1,6 +1,10 @@
 import {View,ImageBackground, Button, Image, TextInput, StyleSheet, TouchableOpacity, ScrollView, FlatList,Text} from 'react-native';
 import {AntDesign, MaterialCommunityIcons} from "@expo/vector-icons";
-function AudioList(){
+function AudioList({navigation}){
+    console.log(navigation)
+    const musicPressHandler = (music) =>{
+          navigation.push('Home')
+    }
     const audis = [
         {
             name:"RABEEL 1",
@@ -70,7 +74,9 @@ function AudioList(){
                 data={audis}
                 keyExtractor= {audi => audi.name}
                 renderItem={({item})=>{
-                   return(<TouchableOpacity style={styles.music}>
+                   return(<TouchableOpacity
+                            onPress={()=>musicPressHandler(item)} 
+                            style={styles.music}>
                         <View style={styles.musicInfo}>
                         <View>
                            <Image style={styles.musicIcon} source={require('../assets/team.jpg')}/>
