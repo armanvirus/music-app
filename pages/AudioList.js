@@ -1,56 +1,10 @@
 import {View,ImageBackground, Button, Image, TextInput, StyleSheet, TouchableOpacity, ScrollView, FlatList,Text} from 'react-native';
 import {AntDesign, MaterialCommunityIcons} from "@expo/vector-icons";
+import {AudiosObj } from '../componets/AudiosObj';
 function AudioList({navigation}){
-    console.log(navigation)
-    const musicPressHandler = (music) =>{
-          navigation.push('Home')
+    const musicPressHandler = (musicMusic) =>{
+          navigation.push('Home',{index:musicMusic})
     }
-    const audis = [
-        {
-            name:"RABEEL 1",
-            title:"Son Annabi cikin Zuciya"
-        },
-        {
-            name:"RABEEL 2",
-            title:"Annabi fiyayyen halitta"
-        },
-        {
-            name:"RABEEL 3",
-            title:"Annabi sha yabo abun ambato"
-        },
-        {
-            name:"RABEEL 4",
-            title:"Imamul Mursalina"
-        },
-        {
-            name:"RABEEL 5",
-            title:"Son Annabi cikin Zuciya"
-        },
-        {
-            name:"RABEEL 6",
-            title:"Imamul Mursalina"
-        },
-        {
-            name:"RABEEL 8",
-            title:"Imamul Mursalina"
-        },
-        {
-            name:"RABEEL 7",
-            title:"Son Annabi cikin Zuciya"
-        },
-        {
-            name:"RABEEL 9",
-            title:"Son Annabi cikin Zuciya"
-        },
-        {
-            name:"RABEEL 10",
-            title:"Son Annabi cikin Zuciya"
-        },
-        {
-            name:"RABEEL 11",
-            title:"Son Annabi cikin Zuciya"
-        }
-    ];
     return(
         <View style={styles.audioList}>
                 {/* <View style={styles.drawaCt}>
@@ -71,11 +25,11 @@ function AudioList({navigation}){
                 }}>Play Lists</Text>
             </View>
                 <FlatList 
-                data={audis}
+                data={AudiosObj}
                 keyExtractor= {audi => audi.name}
-                renderItem={({item})=>{
+                renderItem={({item,index})=>{
                    return(<TouchableOpacity
-                            onPress={()=>musicPressHandler(item)} 
+                            onPress={()=>musicPressHandler(index)} 
                             style={styles.music}>
                         <View style={styles.musicInfo}>
                         <View>

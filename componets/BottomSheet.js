@@ -1,74 +1,144 @@
-"use strict";
-exports.__esModule = true;
-var react_native_1 = require("react-native");
-var react_1 = require("react");
-var react_native_gesture_handler_1 = require("react-native-gesture-handler");
-var react_native_reanimated_1 = require("react-native-reanimated");
-var SCREEN_HEIGHT = react_native_1.Dimensions.get('window').height;
-var MAX_TRANSLATE_Y = -SCREEN_HEIGHT + 50;
-var BottomSheet = react_1["default"].forwardRef(function (_a, ref) {
-    var children = _a.children;
-    var translateY = (0, react_native_reanimated_1.useSharedValue)(0);
-    var active = (0, react_native_reanimated_1.useSharedValue)(false);
-    var scrollTo = (0, react_1.useCallback)(function (destination) {
-        'worklet';
-        active.value = destination !== 0;
-        translateY.value = (0, react_native_reanimated_1.withSpring)(destination, { damping: 50 });
-    }, []);
-    var isActive = (0, react_1.useCallback)(function () {
-        return active.value;
-    }, []);
-    (0, react_1.useImperativeHandle)(ref, function () { return ({ scrollTo: scrollTo, isActive: isActive }); }, [
-        scrollTo,
-        isActive,
-    ]);
-    var context = (0, react_native_reanimated_1.useSharedValue)({ y: 0 });
-    var gesture = react_native_gesture_handler_1.Gesture.Pan()
-        .onStart(function () {
-        context.value = { y: translateY.value };
-    })
-        .onUpdate(function (event) {
-        translateY.value = event.translationY + context.value.y;
-        translateY.value = Math.max(translateY.value, MAX_TRANSLATE_Y);
-    })
-        .onEnd(function () {
-        if (translateY.value > -SCREEN_HEIGHT / 3) {
-            scrollTo(0);
-        }
-        else if (translateY.value < -SCREEN_HEIGHT / 1.5) {
-            scrollTo(MAX_TRANSLATE_Y);
-        }
-    });
-    var rBottomSheetStyle = (0, react_native_reanimated_1.useAnimatedStyle)(function () {
-        var borderRadius = (0, react_native_reanimated_1.interpolate)(translateY.value, [MAX_TRANSLATE_Y + 50, MAX_TRANSLATE_Y], [25, 5], react_native_reanimated_1.Extrapolate.CLAMP);
-        return {
-            borderRadius: borderRadius,
-            transform: [{ translateY: translateY.value }]
-        };
-    });
-    return (<react_native_gesture_handler_1.GestureDetector gesture={gesture}>
-        <react_native_reanimated_1.View style={[styles.bottomSheetContainer, rBottomSheetStyle]}>
-          <react_native_1.View style={styles.line}/>
-          {children}
-        </react_native_reanimated_1.View>
-      </react_native_gesture_handler_1.GestureDetector>);
-});
-var styles = react_native_1.StyleSheet.create({
-    bottomSheetContainer: {
-        height: SCREEN_HEIGHT,
-        width: '100%',
-        backgroundColor: 'white',
-        position: 'absolute',
-        top: SCREEN_HEIGHT,
-        borderRadius: 25
-    },
-    line: {
-        width: 75,
-        height: 4,
-        backgroundColor: 'grey',
-        alignSelf: 'center',
-        marginVertical: 15,
-        borderRadius: 2
+
+import {Dimensions,StyleSheet,View, TouchableOpacity,FlatList,Image,Text} from 'react-native';
+import {GestureDetector,Gesture} from 'react-native-gesture-handler';
+import Animated,{useAnimatedStyle,useSharedValue} from 'react-native-reanimated';
+const {height:SCREEN_HEIGHT} = Dimensions.get('window');
+import {AudiosObj} from './AudiosObj';
+
+
+const BottomSheet = (props)=>{
+    // console.log(AudiosObj().forEach((el)=> console.log(el.name)))
+    // console.log(props)
+    const handlePlay = (index)=>{
+        props.setI(index)
     }
-});
-exports["default"] = BottomSheet;
+    const translateY = useSharedValue(0);
+    const context = useSharedValue({y:0})
+    const gesture = Gesture.Pan()
+    .onStart(()=>{
+        context.value = {y:translateY.value}
+    })
+    .onUpdate((event)=>{
+        translateY.value = event.translationY + context.value.y
+        translateY.value = Math.max(translateY.value, (-SCREEN_HEIGHT + (SCREEN_HEIGHT/4)));
+        // console.log(translateY.value)
+    });
+    const rBottomSheetStyle = useAnimatedStyle(()=>{
+        return{
+            transform:translateY.value > -35 ?
+            [{translateY:0}] : [{translateY:translateY.value}]
+        }
+            
+    });
+    return(
+        <GestureDetector gesture={gesture}>
+        <Animated.View style={[styles.bottomSheet,rBottomSheetStyle]}>
+        <View style={styles.audioList}>
+                <View style={styles.drawaCt}>
+                    <TouchableOpacity style={styles.drawerBtn}></TouchableOpacity>
+                </View>
+
+                <FlatList 
+                data={AudiosObj}
+                keyExtractor= {audi => audi.name}
+                renderItem={({item,index})=>{
+                   return( <TouchableOpacity
+                            onPress={()=> handlePlay(index)} 
+                            style={styles.music}>
+                        <View style={styles.musicInfo}>
+                        <View>
+                           <Image style={styles.musicIcon} source={require('../assets/team.jpg')}/>
+                       </View>
+                            <View>
+                                <Text style={styles.musicName}>{item.name}</Text>
+                                <Text style={styles.musicTitle}>{item.title}</Text>   
+                            </View> 
+                        </View>
+                        <Text style={styles.musicDuration}>3:30</Text>
+                    </TouchableOpacity>)
+                }}/>
+        </View>
+        </Animated.View>
+        </GestureDetector>
+    ) 
+}
+
+const styles = StyleSheet.create({
+    bottomSheet:{
+        height:SCREEN_HEIGHT - (SCREEN_HEIGHT/5) ,
+        width:"100%",
+        position:"absolute",
+        top:SCREEN_HEIGHT/1.2,
+        backgroundColor:"rgb(0,0,10)",
+        zIndex:3,
+        borderRadius:25,
+        
+        
+    },
+    audioList:{
+        backgroundColor:"rgb(0,0,10)",
+        // paddingHorizontal:30,
+        paddingBottom:32,
+        borderTopLeftRadius:20,
+        borderTopRightRadius:20,
+        // transform:[{translateY:-50}],
+        width:"100%",
+        // margingBottom:SCREEN_HEIGHT/2
+        
+        
+    
+        
+    },
+    drawaCt:{
+        width:"100%",
+        flexDirection:"row",
+        justifyContent:"center",
+        marginBottom:16,
+        backgroundColor:'red',
+        paddingVertical:10,
+        borderTopLeftRadius:20,
+        borderTopRightRadius:20,
+    },
+    drawerBtn:{
+        backgroundColor:"#f2f2f2",
+        width:80,
+        height:6,
+        borderRadius:3
+    },
+    music:{
+        paddingRight:20,
+        paddingLeft:5,
+        paddingVertical:10,
+        flexDirection:"row",
+        justifyContent:"space-between",
+        alignItems:"center",
+        backgroundColor:"rgba(38,38,38,1)",
+        marginVertical:1,
+        // borderRadius:5
+    },
+    musicInfo:{
+        flexDirection:"row",
+        alignItems:"center",
+        gap:10,
+        
+    },
+    musicIcon:{
+        height:50,
+        width:50,
+        borderRadius:3,
+        marginRight:5
+    },
+    musicName:{
+        color:"#f3f3f3",
+        fontSize:16,
+    },
+    musicTitle:{
+        fontSize:12,
+        color:"#f4f4f4",
+        marginTop:3
+    },
+    musicDuration:{
+        color:"#ffffff",
+    }
+})
+export default BottomSheet;

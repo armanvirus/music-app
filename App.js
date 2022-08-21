@@ -14,8 +14,9 @@ export default function App() {
 
     <View style={styles.container}>
     <StatusBar animated={true}
+        style='dark'
         bkacgroundColor="#f2f2f2"
-        hidden={true} />
+         />
     <NavigationContainer>
     <Stack.Navigator screenOptions={{
       // initialRouteName:'Home'
