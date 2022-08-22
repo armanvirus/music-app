@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react';
+import {StateContext} from '../Context/StateStore';
 import {AudiosObj } from '../componets/AudiosObj';
 import {
     View,
-    ImageBackground, 
-    Button, 
+    ImageBackground,  
     Image, 
     TextInput, 
     StyleSheet, 
@@ -21,12 +21,12 @@ import {
 import BottomSheet from '../componets/BottomSheet';
 // import AudiosObj from '../componets/AudiosObj';
 const Home = ({route,navigation})=>{
-    // console.log(route.params.music.name)
+    const [playbackInstance, setPlaybackInstance] = useContext(StateContext);
     const [index, setIndex] = useState(null);
     const [obj, setObj] = useState(null);
     // const [sound, setSound] = useState();
     const [isPlaying, setPlaying] = useState(false);
-    const [playbackInstance, setPlaybackInstance] = useState(null);
+    // const [playbackInstance, setPlaybackInstance] = useState(null);
     const [isSeeking, setSeeking ] = useState(false);
     const [isNotShuffle, setShuffle] = useState(true);
     const [loopType, setLoopType] = useState('all');
@@ -39,14 +39,6 @@ const Home = ({route,navigation})=>{
                 && route.params.index !== index){
                     setIndex(route.params.index);
                 }
-        Audio.setAudioModeAsync({
-            staysActiveInBackground: true,
-            interruptionModeIOS: InterruptionModeIOS.DoNotMix,
-            playsInSilentModeIOS: true,
-            shouldDuckAndroid: true,
-            interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
-            
-          });
       },[""]);
 
       useEffect(()=>{
@@ -58,7 +50,7 @@ const Home = ({route,navigation})=>{
      const  _loadNewPlaybackInstance = async (playing) => {
          if(playbackInstance === null || playbackInstance === undefined){
             const source = await AudiosObj[index].uri;
-            const initialStatus = {shouldPlay:true,}
+            const initialStatus = {shouldPlay:true, isLooping:false}
             try{
     
               const { sound,status} = await Audio.Sound.createAsync(
