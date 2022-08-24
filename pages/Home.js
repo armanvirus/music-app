@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
+import Slider from '@react-native-community/slider';
 import {StateContext} from '../Context/StateStore';
 import {AudiosObj } from '../componets/AudiosObj';
 import {
+    Dimensions,
     View,
     ImageBackground,  
     Image, 
@@ -11,7 +13,7 @@ import {
     ScrollView, 
     FlatList,
     Text} from 'react-native';
-import {AntDesign, MaterialCommunityIcons} from "@expo/vector-icons";
+import {AntDesign, MaterialCommunityIcons,} from "@expo/vector-icons";
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {
     Audio,
@@ -19,20 +21,30 @@ import {
     InterruptionModeIOS,
   } from "expo-av";
 import BottomSheet from '../componets/BottomSheet';
+const {width:SCREEN_WIDTH} = Dimensions.get('window');
 // import AudiosObj from '../componets/AudiosObj';
 const Home = ({route,navigation})=>{
-    const [playbackInstance, setPlaybackInstance] = useContext(StateContext);
-    const [index, setIndex] = useState(null);
-    const [obj, setObj] = useState(null);
+    const {        
+            _loadNewPlaybackInstance,
+            _advanceIndex,
+            isNotShuffle, setShuffle,
+            playbackInstance, 
+            setPlaybackInstance,
+            isPlaying, 
+            setPlaying,
+            playBackInstaceDuration, 
+            setDuration,
+            playBackInstacePosition, 
+            setPosition,
+            isLoaded,
+            index, 
+            setIndex 
+        } = useContext(StateContext);
     // const [sound, setSound] = useState();
-    const [isPlaying, setPlaying] = useState(false);
     // const [playbackInstance, setPlaybackInstance] = useState(null);
     const [isSeeking, setSeeking ] = useState(false);
-    const [isNotShuffle, setShuffle] = useState(true);
+    const [shouldPlayAtEndOfSeek,setShouldPlayAtEndOfSeek ] = useState(false)
     const [loopType, setLoopType] = useState('all');
-    const [isLoading, setLoading] = useState(true);
-    const [playBackInstacePosition, setPosition] = useState(null);
-    const [playBackInstaceDuration, setDuration] = useState(null);
       useEffect(()=>{
         //   getData()
           if(route.params.index !== 'undefined' 
@@ -45,84 +57,7 @@ const Home = ({route,navigation})=>{
           if(index !== 'undefined' && index !== null){
             _loadNewPlaybackInstance(true)
           }
-      },[index])
-
-     const  _loadNewPlaybackInstance = async (playing) => {
-         if(playbackInstance === null || playbackInstance === undefined){
-            const source = await AudiosObj[index].uri;
-            const initialStatus = {shouldPlay:true, isLooping:false}
-            try{
-    
-              const { sound,status} = await Audio.Sound.createAsync(
-                source, initialStatus,          
-                (status) => {
-                    if (status.isLoaded){
-                        setPosition(status.positionMillis)
-                        setDuration(status.durationMillis)
-                        // shouldPlay: status.shouldPlay,
-                        setPlaying(status.isPlaying)
-                        // loopingType: status.isLooping ? LOOPING_TYPE_ONE : LOOPING_TYPE_ALL,
-                      
-                      if (status.didJustFinish) {
-                          console.log('finished')
-                        _advanceIndex(true);
-                        _updatePlaybackInstanceForIndex(true);
-                      }
-                    } else{
-                      if (status.error) {
-                        console.log(`FATAL PLAYER ERROR: ${status.error}`);
-                      }}
-                    
-                  }
-              )
-              setPlaybackInstance(sound)
-            //   console.log(status)
-            //   await sound.playAsync()
-        }catch(error){
-            console.log(error)
-        }
-         }
-         else{
-            await playbackInstance.unloadAsync();
-            await setPlaybackInstance(null);
-
-            const source = await AudiosObj[index].uri;
-            const initialStatus = {shouldPlay:true,}
-            try{
-    
-              const { sound,status} = await Audio.Sound.createAsync(
-                source, initialStatus,          
-                (status) => {
-                    if (status.isLoaded){
-                        setPosition(status.positionMillis)
-                        setDuration(status.durationMillis)
-                        // shouldPlay: status.shouldPlay,
-                        setPlaying(status.isPlaying)
-                        // loopingType: status.isLooping ? LOOPING_TYPE_ONE : LOOPING_TYPE_ALL,
-                      
-                      if (status.didJustFinish) {
-                          console.log('finished')
-                        _advanceIndex(true);
-                        _updatePlaybackInstanceForIndex(true);
-                      }
-                    } else{
-                      if (status.error) {
-                        console.log(`FATAL PLAYER ERROR: ${status.error}`);
-                      }}
-                    
-                  }
-              )
-              setPlaybackInstance(sound)
-            //   console.log(status)
-            //   await sound.playAsync()
-        }catch(error){
-            console.log(error)
-        }
-        }
-    
-        
-    
-      }
+      },[index]);
 
       _onPlayPausePressed = () => {
         if (playbackInstance != null) {
@@ -134,47 +69,6 @@ const Home = ({route,navigation})=>{
         }
       };
 
-    // const  _onPlaybackStatusUpdate = status => {
-    //     if (status.isLoaded) {
-    //         setPosition(status.positionMillis)
-    //         setDuration(status.durationMillis)
-    //         // shouldPlay: status.shouldPlay,
-    //         setPlaying(status.isPlaying)
-    //         // loopingType: status.isLooping ? LOOPING_TYPE_ONE : LOOPING_TYPE_ALL,
-          
-    //       if (status.didJustFinish && !status.isLooping) {
-    //         _advanceIndex(true);
-    //         _updatePlaybackInstanceForIndex(true);
-    //       }
-    //     } else {
-    //       if (status.error) {
-    //         console.log(`FATAL PLAYER ERROR: ${status.error}`);
-    //       }
-    //     }
-    //   }
-
-    function  _advanceIndex(forwad) {
-        if(!isNotShuffle){
-            const randomChoice = Math.floor(Math.random() * (AudiosObj.length - 1));
-            setIndex(randomChoice);
-        }else
-        if(forwad){
-            if(index === AudiosObj.length -1){
-                setIndex(1)
-            }else{
-                setIndex(index + 1)
-            }
-        } else {
-            if(index > 1){
-                setIndex(index - 1)
-            }else{
-                setIndex(AudiosObj().length - 1)
-            }
-        }
-      }
-      async function _updatePlaybackInstanceForIndex(playing) {  
-        _loadNewPlaybackInstance(playing);
-      }
 
       const _onForwardPressed = () => {
         if (playbackInstance != null) {
@@ -195,10 +89,45 @@ const Home = ({route,navigation})=>{
             playbackInstance.stopAsync();
         }
       };
-  
-     const bottomSheetHandler = (count)=>{
-          return setIndex(count)
-      }
+
+    const  _getSeekSliderPosition = ()=> {
+    if (
+      playbackInstance != null &&
+      playBackInstacePosition != null &&
+      playBackInstaceDuration != null
+    ) {
+      return (
+        playBackInstacePosition /
+        playBackInstaceDuration
+      );
+    }
+    return 0;
+  }
+
+ const _onSeekSliderSlidingComplete = async value => {
+    if (playbackInstance != null) {
+      setSeeking(false);
+      try{
+        const seekPosition = value * playBackInstaceDuration;
+        if (shouldPlayAtEndOfSeek) {
+          playbackInstance.playFromPositionAsync(seekPosition);
+        } else {
+          playbackInstance.setPositionAsync(seekPosition);
+        }
+      }catch(error){
+        console.log(error)
+    }
+      
+    }
+  };
+
+  const _onSeekSliderValueChange = value => {
+    if (playbackInstance != null && !isSeeking) {
+      setSeeking(true);
+      setShouldPlayAtEndOfSeek(true);
+      playbackInstance.pauseAsync();
+    }
+  };
     return(
         <GestureHandlerRootView style={{flex:1}}>
         <View style={styles.homeContainer}>
@@ -209,12 +138,12 @@ const Home = ({route,navigation})=>{
                 justifyContent:"space-between",
                 backgroundColor:"rgba(26,26,26,.95)"}}>
                 <View style={styles.header}>
-                    <TouchableOpacity style={styles.menu}><AntDesign name="menufold"
+                    {/* <TouchableOpacity style={styles.menu}><AntDesign name="menufold"
                      size={22}
-                     /></TouchableOpacity>
+                     /></TouchableOpacity> */}
                 </View>
                 <View style={styles.details}>
-                    <View>
+                    <View style={{width:"100%",alignItems:"center"}}>
                     <Image style={styles.rotator} source={require('../assets/wizad.jpg')}/>
                     <View style={{
                             alignItems:"center",
@@ -230,22 +159,39 @@ const Home = ({route,navigation})=>{
                             width:"100%",
                             marginTop:15
                         }}>
-                            <View style={styles.progress}></View>
+                            <View style={styles.progress}>
+                            <Slider
+                                style={{width:SCREEN_WIDTH-5, height:10}}
+                                minimumValue={0}
+                                tapToSeek={true}
+                                disabled={!isLoaded}
+                                value={_getSeekSliderPosition()}
+                                onSlidingComplete={_onSeekSliderSlidingComplete}
+                                onValueChange={_onSeekSliderValueChange}
+                                maximumValue={1}
+                                minimumTrackTintColor="green"
+                                maximumTrackTintColor="red"
+/>
+                            </View>
                             <View style={{
                                 flexDirection:"row",
                                 justifyContent:"space-between",
-                                alignItems:"center"
+                                alignItems:"center",
+                                width:SCREEN_WIDTH-15,
+                                alignSelf:"center"
                             }}>
                             <Text style={{
                                 marginHorizontal:5,
                                 marginVertical:2,
-                                color:"#ffffff"
-                            }}>00</Text>
+                                color:"#ffffff",
+                                fontSize:15
+                            }}>{isLoaded? playBackInstaceDuration: 0 }</Text>
                             <Text style={{
                                 marginHorizontal:5,
                                 marginVertical:2,
-                                color:"#ffffff"
-                            }}>03</Text>
+                                color:"#ffffff",
+                                fontSize:15
+                            }}>{isLoaded ? playBackInstacePosition: 0}</Text>
                             </View>
                         </View>
                         <View style={styles.controls}>
@@ -258,7 +204,9 @@ const Home = ({route,navigation})=>{
                             <TouchableOpacity 
                             onPress={ ()=>_onPlayPausePressed()}
                             style={styles.ctrlBtn}>
-                            <AntDesign name="caretright" size={28}/>
+                            {isPlaying ? <MaterialCommunityIcons name="pause" size={28} color="black" />
+                            :
+                            <AntDesign name="caretright" size={28}/>}
                             </TouchableOpacity>
                             <TouchableOpacity onPress={()=>_onForwardPressed()}>
                             <AntDesign name="stepforward" color="#f2f2f2" size={25}/>
@@ -289,7 +237,7 @@ const styles = StyleSheet.create({
         flexDirection:"row",
         justifyContent:"flex-end",
         alignItems:"center",
-        marginBottom:16,
+        // marginBottom:16,
         padding:30
     },
     // cover:{
@@ -345,23 +293,42 @@ const styles = StyleSheet.create({
     controls:{
         width:"95%",
         paddingHorizontal:20,
-        paddingTop:5,
+        paddingTop:15,
         paddingBottom:30,
         flexDirection:"row",
         justifyContent:"space-around",
         alignItems:"center"
     },
     ctrlBtn:{
-        backgroundColor:"#f2f2f2",
+        // backgroundColor:"#f2f2f2",
         padding:10,
-        borderRadius:50
+        borderRadius:50,
+        // shadowColor:"red",
+        // shadowOffset:{width:0, height:0},
+        // shadowRadius:8,
+        // borderRadius:5
+        shadowColor: 'white', // IOS
+    shadowOffset: { height:0, width: 0 }, // IOS
+    shadowOpacity: 1, // IOS
+    shadowRadius: 1, //IOS
+    backgroundColor: '#fff',
+    elevation: 2, // Android
+    height: 50,
+    width: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+        
     },
     progress:{
-        height:4,
-        width:"100%",
+        height:6,
+        width:SCREEN_WIDTH -20,
         backgroundColor:"#f3f3f3",
         borderRadius:3,
-        marginBottom:5
+        marginBottom:5,
+        alignItems:"center",
+        justifyContent:"center",
+        alignSelf:"center"
     },
     
     
