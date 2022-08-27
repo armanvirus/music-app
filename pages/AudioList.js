@@ -1,9 +1,37 @@
+import React,{useEffect,useContext} from "react";
 import {View,ImageBackground, Button, Image, TextInput, StyleSheet, TouchableOpacity, ScrollView, FlatList,Text} from 'react-native';
 import {AntDesign, MaterialCommunityIcons} from "@expo/vector-icons";
 import {AudiosObj } from '../componets/AudiosObj';
+import {StateContext} from '../Context/StateStore';
 function AudioList({navigation}){
+    const {        
+        _loadNewPlaybackInstance,
+        playbackInstance, 
+        setPlaybackInstance,
+        isPlaying, 
+        setPlaying,
+        isLoaded,
+        playinIndex, 
+        setIndex 
+    } = useContext(StateContext);
     const musicPressHandler = (musicMusic) =>{
-          navigation.push('Home',{index:musicMusic})
+        //   navigation.push('Home',{index:musicMusic})
+          setIndex(musicMusic);
+        //   navigation.push('Home');
+    }
+
+
+    useEffect(()=>{
+        initiatePlay()
+    },[playinIndex]);
+
+    const initiatePlay = async()=>{
+        if(playinIndex !== 'undefined' && playinIndex !== null){
+            console.log("is changed")
+        //    _loadNewPlaybackInstance(true);
+            navigation.push('Home');
+
+        }
     }
     return(
         <View style={styles.audioList}>

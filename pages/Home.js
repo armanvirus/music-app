@@ -37,7 +37,7 @@ const Home = ({route,navigation})=>{
             playBackInstacePosition, 
             setPosition,
             isLoaded,
-            index, 
+            playinIndex, 
             setIndex 
         } = useContext(StateContext);
     // const [sound, setSound] = useState();
@@ -47,17 +47,18 @@ const Home = ({route,navigation})=>{
     const [loopType, setLoopType] = useState('all');
       useEffect(()=>{
         //   getData()
-          if(route.params.index !== 'undefined' 
-                && route.params.index !== index){
-                    setIndex(route.params.index);
-                }
+        //   if(route.params.index !== 'undefined' 
+        //         && route.params.index !== index){
+        //             setIndex(route.params.index);
+        //         }
       },[""]);
 
       useEffect(()=>{
-          if(index !== 'undefined' && index !== null){
+          if(playinIndex !== 'undefined' && playinIndex !== null){
+              console.log(playbackInstance)
             _loadNewPlaybackInstance(true)
           }
-      },[index]);
+      },[playinIndex]);
 
       _onPlayPausePressed = () => {
         if (playbackInstance != null) {
@@ -149,7 +150,7 @@ const Home = ({route,navigation})=>{
                             alignItems:"center",
                             marginBottom:40, 
                             justifyContent:"center"}}>
-                            <Text style={styles.audioName}>{ index ? AudiosObj[index].name : 'Loading...'}</Text>
+                            <Text style={styles.audioName}>{ playinIndex ? AudiosObj[playinIndex].name : 'Loading...'}</Text>
                             <Text style={styles.artist}>Sayyadi Rabil</Text>
                         </View>
                     </View>
@@ -167,7 +168,7 @@ const Home = ({route,navigation})=>{
                                 disabled={!isLoaded}
                                 value={_getSeekSliderPosition()}
                                 onSlidingComplete={_onSeekSliderSlidingComplete}
-                                onValueChange={_onSeekSliderValueChange}
+                                // onValueChange={_onSeekSliderValueChange}
                                 maximumValue={1}
                                 minimumTrackTintColor="green"
                                 maximumTrackTintColor="red"

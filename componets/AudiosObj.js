@@ -1,59 +1,53 @@
-
+class PlaylistItem {
+    constructor(name, uri, id, title, duration) {
+      this.name = name;
+      this.uri = uri;
+      this.id = id;
+      this.title = title;
+      this.duration = duration;
+    }
+  }
   export const AudiosObj =  [
-            {
-                name:"GHALI Adam_A._Zango_-_Dabo_Dabo_feat_Ibada_NT4",
-                title:"Son Annabi cikin Zuciya",
-                uri:require('../Audio/R.mp3')
-            },
-            {
-                name:"GHALI NT4 buduruwa bani abun",
-                title:"Annabi fiyayyen halitta",
-                uri:require('../Audio/A.mp3')
-            },
-            {
-                name:"Ghali x Gariba x Ebaada(NT4) x Vibez General",
-                title:"Annabi sha yabo abun ambato",
-                uri:require('../Audio/B.mp3')
-                
-            },
-            {
-                name:"__Adaidaita_Official_Video",
-                title:"Imamul Mursalina",
-                uri:require('../Audio/C.mp3')
-                
-            },
-            {
-                name:"NT4 wo wo",
-                title:"Son Annabi cikin Zuciya",
-                uri:require('../Audio/D.mp3')
-            },
-            {
-                name:"NT4_ tabalangana",
-                title:"Imamul Mursalina",
-                uri:require('../Audio/E.mp3')
-            },
-            {
-                name:"RABEEL 8",
-                title:"Imamul Mursalina",
-                uri:require('../Audio/F.mp3')
-            },
-            {
-                name:"RABEEL 7",
-                title:"Son Annabi cikin Zuciya",
-                uri:require('../Audio/G.mp3')
-            },
-            {
-                name:"RABEEL 9",
-                title:"Son Annabi cikin Zuciya"
-            },
-            {
-                name:"RABEEL 10",
-                title:"Son Annabi cikin Zuciya"
-            },
-            {
-                name:"RABEEL 11",
-                title:"Son Annabi cikin Zuciya"
-            }
+           new PlaylistItem(
+                "Maryam Remix",
+                require('../Audio/A.mp3'),
+                "a1",
+                "Rabil Jos",
+                "13:57"
+
+            ),
+            new PlaylistItem(
+                "Rabil Remix+++ Ruhi",
+                require('../Audio/B.mp3'),
+                "b1",
+                "Rabil Jos",
+                "15:16"
+
+            ),
+            new PlaylistItem(
+                "Rabil Gamuwa",
+                require('../Audio/C.mp3'),
+                "c1",
+                "Rabil Jos",
+                "06:30"
+
+            ),
+            new PlaylistItem(
+                "Rabil Jos Harazimi",
+                require('../Audio/D.mp3'),
+                "d1",
+                "Rabil Jos",
+                "06:24"
+
+            ),
+            new PlaylistItem(
+                "Zakiyyu ft Rabil",
+                require('../Audio/E.mp3'),
+                "e1",
+                "Zakiyyu & Rabil",
+                "07:03"
+
+            )
         ]
 
         export default{
