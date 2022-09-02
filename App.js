@@ -1,14 +1,20 @@
-import React,{useState,useEffect,useRef} from 'react'
 import 'react-native-gesture-handler';
+import React,{useState,useEffect,useRef} from 'react'
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity,DrawerLayoutAndroid } from 'react-native';
+import { StyleSheet,ScrollView, Text, View, 
+  TouchableOpacity,
+  DrawerLayoutAndroid,
+  Dimensions } from 'react-native';
 import Home from "./pages/Home";
+import HeaderLeft from './componets/HeaderLeft';
+import HeaderRight from "./componets/HeaderRight";
 import {NavigationContainer} from "@react-navigation/native"; 
 import { createStackNavigator } from '@react-navigation/stack';
 import {AntDesign,Ionicons, MaterialCommunityIcons,Entypo} from "@expo/vector-icons";
 import AudioList from './pages/AudioList';
 import Stat from './Context/StateStore';
 import Header from './componets/Header';
+const {height:SCREEN_HEIGHT} = Dimensions.get('window');
 import {
   Audio,
   InterruptionModeAndroid,
@@ -19,11 +25,7 @@ const Stack = createStackNavigator();
 
 export default function App() {
   const [isVisible,setVisible] = useState(false);
-  const drawerLayoutRef = useRef();
 
-  useEffect(()=>{
-    openDrawer()
-  },[isVisible])
   useEffect(() => {
     Audio.setAudioModeAsync({
       staysActiveInBackground: true,
@@ -35,19 +37,7 @@ export default function App() {
     });
   }, ['']);
 
-  const openDrawer = () => {
-    if(isVisible){
-      drawerLayoutRef.current.openDrawer();
-    }
-  }
 
-  const navigationView = (
-    <View style={styles.navigationContainer}>
-      <Text style={{ fontSize: 15 }}>
-      This drawer opens by drawing the screen, 
-      but not with the "openDrawer" method :c</Text>
-    </View>
-  );
   return (
     <View style={styles.container}>
     <StatusBar animated={true}
@@ -64,7 +54,7 @@ export default function App() {
     <Stack.Navigator screenOptions={{
       // initialRouteName:'Home'
     }}>
-      <Stack.Screen
+      {/* <Stack.Screen
       options={{
         presentation:'modal',
         gestureEnabled:true,
@@ -86,7 +76,7 @@ export default function App() {
           elevation:10
         }
       }} 
-       name="Audios" component={gestureHandlerRootHOC(AudioList)} />
+       name="Audios" component={gestureHandlerRootHOC(AudioList)} /> */}
       <Stack.Screen
       options={{
         presentation:'modal',
@@ -94,23 +84,11 @@ export default function App() {
         gestureDirection:'vertical',
         detachInactiveScreens:false,
         headerTitle:()=> <Header/>,
-        headerLeft:()=>(
-          <TouchableOpacity 
-          onPress={()=>(console.log("back btn pressed"))} 
-          style={{marginLeft:15}}
-          >
-          <Ionicons name="chevron-back" size={24} color="white" />
-        </TouchableOpacity>) ,
-        headerRight: () => (
-          <TouchableOpacity onPress={()=>(setVisible(!isVisible))} 
-            style={{marginRight:15}}
-            >
-            <Entypo name="dots-three-vertical" size={24} color="white" />
-          </TouchableOpacity>
-        ),
+        headerLeft:()=><HeaderLeft/> ,
+        headerRight: () =><HeaderRight/>,
         headerStyle:{
           height:100,
-          backgroundColor:"rgb(0,0,20)",
+          backgroundColor:"rgba(26,26,26,.95)",
           shadowColor:"rgba(245,250,250,0.9)",
           elevation:10,
           
@@ -129,7 +107,8 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
+    minHeight:SCREEN_HEIGHT,
   },
   menu:{
     borderRadius:50,

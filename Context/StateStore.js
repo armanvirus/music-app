@@ -13,6 +13,8 @@ const Stat = ({children})=>{
     const [isPlaying, setPlaying] = useState(false);
     const [isNotShuffle, setShuffle] = useState(true);
     const [isLoaded, setLoaded] = useState(false);
+    const [looping, setlooping] = useState(false);
+    const [showModel, setShowModel] = useState(false);
     const [playBackInstacePosition, setPosition] = useState(null);
     const [playBackInstaceDuration, setDuration] = useState(null);
 
@@ -24,22 +26,25 @@ const Stat = ({children})=>{
            
            try{
             const source = await AudiosObj[playinIndex].uri;
-            const initialStatus = {shouldPlay:true,}
+            const initialStatus = {
+                shouldPlay:true,
+                isLooping:looping}
             const { sound,status} = await Audio.Sound.createAsync(
                source, initialStatus,          
                (status) => {
                    if (status.isLoaded){
-                       setPosition(status.positionMillis/1000)
+                       console.log(status.isLooping)
+                       setPosition(status.positionMillis)
                        setDuration(status.durationMillis)
+                    //    sound.setIsLoopingAsync(looping)
                        // shouldPlay: status.shouldPlay,
                        setLoaded(status.isLoaded);
                        setPlaying(status.isPlaying)
                        // loopingType: status.isLooping ? LOOPING_TYPE_ONE : LOOPING_TYPE_ALL,
                      
-                     if (status.didJustFinish) {
-                         console.log('finished')
-                       _advanceIndex(true);
-                       _updatePlaybackInstanceForIndex(true);
+                     if (status.didJustFinish && status.isLooping == false) {
+                             _advanceIndex(true);
+                         
                      }
                    } else{
                      if (status.error) {
@@ -67,7 +72,7 @@ const Stat = ({children})=>{
         }else
         if(forwad){
             if(playinIndex === AudiosObj.length -1){
-                setIndex(1)
+                setIndex(0)
             }else{
                 setIndex(playinIndex + 1)
             }
@@ -75,7 +80,7 @@ const Stat = ({children})=>{
             if(playinIndex > 1){
                 setIndex(playinIndex - 1)
             }else{
-                setIndex(AudiosObj().length - 1)
+                setIndex(AudiosObj.length - 1)
             }
         }
       }
@@ -88,8 +93,11 @@ const Stat = ({children})=>{
             _advanceIndex,
             _loadNewPlaybackInstance,
             isNotShuffle, setShuffle,
+            looping,setlooping,
             playbackInstance, 
             setPlaybackInstance,
+            showModel, 
+            setShowModel,
             isPlaying, 
             setPlaying,
             playBackInstaceDuration, 
